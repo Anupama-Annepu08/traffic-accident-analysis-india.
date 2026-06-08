@@ -1,0 +1,382 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "945e4485-042c-4ecb-822f-48441438ea2c",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "All libraries loaded! ✅\n"
+     ]
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "import seaborn as sns\n",
+    "import warnings\n",
+    "warnings.filterwarnings('ignore')\n",
+    "\n",
+    "print(\"All libraries loaded! ✅\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "5b6be3b7-1bd9-456d-9cfb-038fc7cd81f5",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Dataset 1 - States: (40, 14)\n",
+      "Dataset 2 - Cities: (51, 14)\n",
+      "Dataset 3 - Causes: (13, 10)\n",
+      "Dataset 4 - Road Users: (19, 4)\n",
+      "\n",
+      "All datasets loaded!\n"
+     ]
+    }
+   ],
+   "source": [
+    "df_states = pd.read_csv('state_accidents_2019_2023.csv')\n",
+    "df_cities = pd.read_csv('cities_accidents_2023.csv')\n",
+    "df_causes = pd.read_csv('causes_violations_2023.csv')\n",
+    "df_users = pd.read_csv('road_users_fatalities_2023.csv')\n",
+    "\n",
+    "print(\"Dataset 1 - States:\", df_states.shape)\n",
+    "print(\"Dataset 2 - Cities:\", df_cities.shape)\n",
+    "print(\"Dataset 3 - Causes:\", df_causes.shape)\n",
+    "print(\"Dataset 4 - Road Users:\", df_users.shape)\n",
+    "print(\"\\nAll datasets loaded!\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "3efab0c7-bc46-4f47-8c22-85b64d712782",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "==================================================\n",
+      "STATES DATASET:\n",
+      "==================================================\n",
+      "  Sl No              State 2019 Accidents 2020 Accidents 2021 Accidents  \\\n",
+      "0     1     Andhra Pradesh          21992          19509          21556   \n",
+      "1     2  Arunachal Pradesh            237            134            283   \n",
+      "2     3              Assam           8350           6595           7411   \n",
+      "\n",
+      "  2022 Accidents 2023 Accidents Change from 2022 to 2023  \\\n",
+      "0          21249          19949                    -1300   \n",
+      "1            227            287                       60   \n",
+      "2           7023           7421                      398   \n",
+      "\n",
+      "   % change from 2022 to 2023 2019 Ranking  2020 Ranking  2021 Ranking  \\\n",
+      "0                        -6.1            8           7.0           7.0   \n",
+      "1                        26.4           30          32.0          28.0   \n",
+      "2                         5.7           16          16.0          16.0   \n",
+      "\n",
+      "   2022 Ranking  2023 Ranking  \n",
+      "0           9.0           9.0  \n",
+      "1          31.0          29.0  \n",
+      "2          16.0          16.0  \n",
+      "\n",
+      "==================================================\n",
+      "CITIES DATASET:\n",
+      "==================================================\n",
+      "   Sl No                   City 2022 Accidents 2023 Accidents  \\\n",
+      "0    1.0                   Agra          1,029          1,007   \n",
+      "1    2.0              Ahmedabad          1,711          1,767   \n",
+      "2    3.0  Allahabad (Prayagraj)          1,370          1,297   \n",
+      "\n",
+      "   2022 Ranking Accidents  2023 Ranking Accidents 2022 Killed 2023 Killed  \\\n",
+      "0                    28.0                    29.0         548         499   \n",
+      "1                    19.0                    19.0         488         535   \n",
+      "2                    24.0                    24.0         603         582   \n",
+      "\n",
+      "   2022 Ranking Killed  2023 Ranking Killed 2022 Injured 2023 Injured  \\\n",
+      "0                  9.0                 11.0          795          657   \n",
+      "1                 11.0                  8.0        1,305        1,347   \n",
+      "2                  6.0                  5.0          886          865   \n",
+      "\n",
+      "   2022 Ranking Injured  2023 Ranking Injured  \n",
+      "0                  29.0                  31.0  \n",
+      "1                  21.0                  21.0  \n",
+      "2                  28.0                  28.0  \n",
+      "\n",
+      "==================================================\n",
+      "CAUSES DATASET:\n",
+      "==================================================\n",
+      "                                         Category 2022-Accidents 2022-Killed  \\\n",
+      "0                                   Over-speeding       3,33,323    1,19,904   \n",
+      "1                                % share of total          72.26       71.16   \n",
+      "2   Drunken driving/consumption of alcohol & drug         10,080       4,201   \n",
+      "3                                % share of total           2.19        2.49   \n",
+      "4         Driving on wrong side/Lane indiscipline         22,586       9,094   \n",
+      "5                                % share of total            4.9         5.4   \n",
+      "6                               Jumping red light          4,021       1,462   \n",
+      "7                                % share of total           0.87        0.87   \n",
+      "8                             Use of mobile phone          7,558       3,395   \n",
+      "9                                % share of total           1.64        2.01   \n",
+      "10                                         Others         83,744      30,435   \n",
+      "11                               % share of total          18.15       18.06   \n",
+      "12                                      All India       4,61,312    1,68,491   \n",
+      "\n",
+      "   2022-injured 2023-Accidents 2023-Killed 2023-injured  %Change-Accidents  \\\n",
+      "0      3,22,795       3,28,727    1,17,682     3,20,416              -1.38   \n",
+      "1         72.81           68.4       68.07        69.23                NaN   \n",
+      "2         8,809          9,143       3,674        8,421              -9.30   \n",
+      "3          1.99            1.9        2.13         1.82                NaN   \n",
+      "4        21,745         25,242       9,432       24,435              11.76   \n",
+      "5           4.9           5.25        5.46         5.28                NaN   \n",
+      "6         3,450          2,440         818        2,157             -39.32   \n",
+      "7          0.78           0.51        0.47         0.47                NaN   \n",
+      "8         6,255          7,122       2,884        6,445              -5.77   \n",
+      "9          1.41           1.48        1.67         1.39                NaN   \n",
+      "10       80,312       1,07,909      38,400     1,00,951              28.86   \n",
+      "11        18.11          22.45       22.21        21.81                NaN   \n",
+      "12     4,43,366       4,80,583    1,72,890     4,62,825               4.18   \n",
+      "\n",
+      "    %Change-killed  %Change-Injured  \n",
+      "0            -1.85            -0.74  \n",
+      "1              NaN              NaN  \n",
+      "2           -12.54            -4.40  \n",
+      "3              NaN              NaN  \n",
+      "4             3.72            12.37  \n",
+      "5              NaN              NaN  \n",
+      "6           -44.05           -37.48  \n",
+      "7              NaN              NaN  \n",
+      "8           -15.05             3.04  \n",
+      "9              NaN              NaN  \n",
+      "10           26.17            25.70  \n",
+      "11             NaN              NaN  \n",
+      "12            2.61             4.39  \n",
+      "\n",
+      "==================================================\n",
+      "ROAD USERS DATASET:\n",
+      "==================================================\n",
+      "                                   Road-user category Persons killed 2022  \\\n",
+      "0                                          Pedestrian              32,825   \n",
+      "1                                      share in Total                19.5   \n",
+      "2                                            Bicycles               4,836   \n",
+      "3                                      share in Total                 2.9   \n",
+      "4                                        Two-wheelers              74,897   \n",
+      "5                                      share in Total                44.5   \n",
+      "6                                      Auto-Rickshaws               6,596   \n",
+      "7                                      share in Total                 3.9   \n",
+      "8                            Cars, Taxis, Vans & LMVs              21,040   \n",
+      "9                                      share in Total                12.5   \n",
+      "10                                     Trucks/Lorries              10,584   \n",
+      "11                                     share in Total                 6.3   \n",
+      "12                                              Buses               4,004   \n",
+      "13                                     share in Total                 2.4   \n",
+      "14   Other Non- Motor Vehicles (including e-rickshaw)               2,372   \n",
+      "15                                     share in Total                 1.4   \n",
+      "16  Others (other motor vehicles, animals drawn ve...              11,337   \n",
+      "17                                     share in Total                 6.7   \n",
+      "18                                              Total            1,68,491   \n",
+      "\n",
+      "   Persons killed 2023  % Change 2023 over 2022  \n",
+      "0               35,221                     7.30  \n",
+      "1                 20.4                      NaN  \n",
+      "2                4,560                    -5.71  \n",
+      "3                  2.6                      NaN  \n",
+      "4               77,539                     3.53  \n",
+      "5                 44.8                      NaN  \n",
+      "6                6,308                    -4.37  \n",
+      "7                  3.6                      NaN  \n",
+      "8               21,496                     2.17  \n",
+      "9                 12.4                      NaN  \n",
+      "10              10,066                    -4.89  \n",
+      "11                 5.8                      NaN  \n",
+      "12               3,956                    -1.20  \n",
+      "13                 2.3                      NaN  \n",
+      "14               2,006                   -15.43  \n",
+      "15                 1.2                      NaN  \n",
+      "16              11,738                     3.54  \n",
+      "17                 6.8                      NaN  \n",
+      "18            1,72,890                      NaN  \n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"=\"*50)\n",
+    "print(\"STATES DATASET:\")\n",
+    "print(\"=\"*50)\n",
+    "print(df_states.head(3))\n",
+    "\n",
+    "print(\"\\n\" + \"=\"*50)\n",
+    "print(\"CITIES DATASET:\")\n",
+    "print(\"=\"*50)\n",
+    "print(df_cities.head(3))\n",
+    "\n",
+    "print(\"\\n\" + \"=\"*50)\n",
+    "print(\"CAUSES DATASET:\")\n",
+    "print(\"=\"*50)\n",
+    "print(df_causes)\n",
+    "\n",
+    "print(\"\\n\" + \"=\"*50)\n",
+    "print(\"ROAD USERS DATASET:\")\n",
+    "print(\"=\"*50)\n",
+    "print(df_users)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "da7693a1-2e07-4134-a463-5ea2cddf5e16",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "States clean shape: (39, 7)\n",
+      "               State 2019 Accidents 2020 Accidents 2021 Accidents  \\\n",
+      "0     Andhra Pradesh          21992          19509          21556   \n",
+      "1  Arunachal Pradesh            237            134            283   \n",
+      "2              Assam           8350           6595           7411   \n",
+      "3              Bihar          10007           8639           9553   \n",
+      "4       Chhattisgarh          13899          11656          12375   \n",
+      "\n",
+      "  2022 Accidents 2023 Accidents  % change from 2022 to 2023  \n",
+      "0          21249          19949                        -6.1  \n",
+      "1            227            287                        26.4  \n",
+      "2           7023           7421                         5.7  \n",
+      "3          10801          11014                         2.0  \n",
+      "4          13279          13468                         1.4  \n"
+     ]
+    }
+   ],
+   "source": [
+    "# Clean States dataset\n",
+    "# Remove ranking columns - we don't need them\n",
+    "df_states_clean = df_states[['State', '2019 Accidents', '2020 Accidents', \n",
+    "                              '2021 Accidents', '2022 Accidents', '2023 Accidents',\n",
+    "                              '% change from 2022 to 2023']].copy()\n",
+    "\n",
+    "# Remove total/summary rows\n",
+    "df_states_clean = df_states_clean[~df_states_clean['State'].str.contains('Total|UT|All', na=False)]\n",
+    "\n",
+    "print(\"States clean shape:\", df_states_clean.shape)\n",
+    "print(df_states_clean.head())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "7382dde0-a07c-4e53-b244-205fa678e402",
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Data types:\n",
+      "State                             str\n",
+      "2019 Accidents                float64\n",
+      "2020 Accidents                float64\n",
+      "2021 Accidents                float64\n",
+      "2022 Accidents                float64\n",
+      "2023 Accidents                float64\n",
+      "% change from 2022 to 2023    float64\n",
+      "dtype: object\n",
+      "\n",
+      "Any missing values?\n",
+      "State                         2\n",
+      "2019 Accidents                3\n",
+      "2020 Accidents                4\n",
+      "2021 Accidents                3\n",
+      "2022 Accidents                2\n",
+      "2023 Accidents                3\n",
+      "% change from 2022 to 2023    3\n",
+      "dtype: int64\n"
+     ]
+    }
+   ],
+   "source": [
+    "accident_cols = ['2019 Accidents', '2020 Accidents', '2021 Accidents', \n",
+    "                 '2022 Accidents', '2023 Accidents']\n",
+    "\n",
+    "for col in accident_cols:\n",
+    "    df_states_clean[col] = pd.to_numeric(df_states_clean[col], errors='coerce')\n",
+    "\n",
+    "print(\"Data types:\")\n",
+    "print(df_states_clean.dtypes)\n",
+    "print(\"\\nAny missing values?\")\n",
+    "print(df_states_clean.isnull().sum())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "9ec27e69-2fb9-4964-be01-a19d88514c83",
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "          State  2019 Accidents  2020 Accidents  2021 Accidents  \\\n",
+      "31  Daman & Diu            69.0             NaN             NaN   \n",
+      "34       Ladakh             NaN             NaN           236.0   \n",
+      "38          NaN             NaN             NaN             NaN   \n",
+      "39          NaN             NaN             NaN             NaN   \n",
+      "\n",
+      "    2022 Accidents  2023 Accidents  % change from 2022 to 2023  \n",
+      "31             0.0             NaN                         NaN  \n",
+      "34           374.0           289.0                       -22.7  \n",
+      "38             NaN             NaN                         NaN  \n",
+      "39             NaN             NaN                         NaN  \n"
+     ]
+    }
+   ],
+   "source": [
+    "\n",
+    "print(df_states_clean[df_states_clean.isnull().any(axis=1)])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "3a2e815d-03f9-4b58-a30a-f145f690ceb3",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.14.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
