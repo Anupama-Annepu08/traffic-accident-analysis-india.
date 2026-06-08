@@ -2,8 +2,6 @@
 
 A comprehensive Data Science project analyzing road traffic accidents across Indian states and cities using official government data from MoRTH (Ministry of Road Transport & Highways).
 
-## 🌐 Live Dashboard
-[Click here to view the Streamlit Dashboard](#) ← add your link after deploying
 
 ## 📊 Project Overview
 This project performs end-to-end data analysis including data collection, cleaning, 
